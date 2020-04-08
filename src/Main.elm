@@ -11,6 +11,7 @@ import Html.Styled.Events exposing (..)
 main = Browser.sandbox
         { init = init
         , view = \model -> toUnstyled (view model)
+        , subscriptions = subscriptions
         , update = update
         }
 -- MODEL
@@ -21,12 +22,12 @@ type alias Ingredient =
   , measurement : String
   }
 
-init : Ingredient
+init : (Ingredient, Cmd Actions)
 init =
-  { ingredient = ""
+  ({ ingredient = ""
   , amount = ""
   , measurement = ""
-  }
+  }, Cmd.none)
 
 -- UPDATE
 
@@ -40,25 +41,31 @@ type Actions
    | EditIngredient
    | SubmitRecipe
 
-update : Actions -> Ingredient -> Ingredient
+update : Actions -> Ingredient -> (Ingredient, Cmd Actions)
 update msg ingredient =
   case msg of
     SetIngredient newMsg ->
-      { ingredient | ingredient = newMsg }
+      (  { ingredient | ingredient = newMsg }, Cmd.none )
     SetAmount newAmnt ->
-      { ingredient | amount = newAmnt }
+      (  { ingredient | amount = newAmnt }, Cmd.none )
     SetMeasurement newMeasure ->
-      { ingredient | measurement = newMeasure }
+      (  { ingredient | measurement = newMeasure }, Cmd.none )
     AddIngredient ->
-      { ingredient | ingredient = "add" }
+      (  { ingredient | ingredient = "add" }, Cmd.none )
     RemoveIngredient ->
-      { ingredient | amount = "remove" }
+      (  { ingredient | amount = "remove" }, Cmd.none )
     InsertIngredient ->
-      { ingredient | measurement = "insert" }
+      (  { ingredient | measurement = "insert" }, Cmd.none )
     EditIngredient ->
-      { ingredient | measurement = "edit" }
+      (  { ingredient | measurement = "edit" }, Cmd.none )
     SubmitRecipe ->
-      { ingredient | measurement = "submit" }
+      (  { ingredient | measurement = "submit" }, Cmd.none )
+
+-- SUBSCRIPTIONS
+
+subscriptions : Ingredient -> Sub Actions
+subscriptions model =
+  Sub.none
 
 -- VIEW
 
@@ -69,11 +76,8 @@ view model =
      styledForm []
           [ div []
                [ styledInput [ placeholder "Insert ingredient", value model.ingredient, onInput SetIngredient ] []
-               , styledInput [ placeholder "Insert amount", value model.ingredient, onInput SetAmount ] []
-               , styledSelect [ placeholder "Insert measurement", value model.ingredient, onInput SetMeasurement ]
-                     [ option [ value "tbsp" ] [ text "tbsp" ]
-                       , option [value "cup" ] [ text "cup" ]
-                     ]
+               , styledInput [ placeholder "Insert amount", value model.amount, onInput SetAmount ] []
+               , measurementSelect model
                , styledButton [ onClick RemoveIngredient ] [ text "Remove" ]
                , styledButton [ onClick EditIngredient ] [ text "Edit" ] ]
            , div []
@@ -83,6 +87,27 @@ view model =
           ]
     ]
 
+measurementSelect : Ingredient -> Html Actions
+measurementSelect model =
+  styledSelect [ placeholder "Insert measurement", value model.measurement, onInput SetMeasurement ]
+  (List.map simpleOption measurements)
+
+simpleOption : String -> Html Actions
+simpleOption val =
+  option [ value val ] [ text val ]
+
+measurements : List String
+measurements =
+  [ "teaspoon"
+  , "tablespoon"
+  , "cup"
+  , "ounce"
+  , "pint"
+  , "quart"
+  , "gallon"
+  , "pound"
+  , "pinch"
+  ]
 -- STYLE
 
 styledForm : List (Attribute msg) -> List (Html msg) -> Html msg
@@ -110,7 +135,7 @@ styledSelect : List (Attribute msg) -> List (Html msg) -> Html msg
 styledSelect =
     styled Html.Styled.select
         [ display block
-        , Css.width (px 70)
+        , Css.width (px 100)
         , padding2 (px 10) (px 10)
         , margin2 (px 3) (px 0)
         , border (px 0)
