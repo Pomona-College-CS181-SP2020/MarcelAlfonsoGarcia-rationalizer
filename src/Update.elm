@@ -8,7 +8,7 @@ import Model exposing (..)
 init : (Model, Cmd Msg)
 init =
   ({ form = Form.initial [] validate
-  , recipe = Nothing
+  , recipeMaybe = Nothing
   }, Cmd.none)
 
 -- UPDATE
@@ -21,6 +21,6 @@ update msg ({ form } as model, _) =
         FormMsg formMsg ->
                 case (formMsg, Form.getOutput form) of
                         ( Form.Submit, Just recipe) ->
-                              ( { model | recipe = Just recipe }, Cmd.none )
+                              ( { model | recipeMaybe = Just recipe }, Cmd.none )
                         _ ->
                               ({ model | form = Form.update validate formMsg form }, Cmd.none )

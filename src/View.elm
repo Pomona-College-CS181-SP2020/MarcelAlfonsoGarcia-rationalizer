@@ -10,9 +10,17 @@ import Form.Validate as Validate exposing (..)
 import Model exposing (..)
 
 view : (Model, Cmd Msg) -> Html Msg
-view ({ form }, _) =
-    Html.map FormMsg (formView form)
+view ({ form, recipeMaybe }, _) =
+        div
+        []
+        [ Html.map FormMsg (formView form)
+        , case recipeMaybe of
+            Just recipe ->
+                p [ class "alert alert-success" ] [ text (recipeString recipe) ]
 
+            Nothing ->
+                text ""
+        ]
 
 formView : Form CustomError Recipe -> Html Form.Msg
 formView form =

@@ -12,7 +12,7 @@ type Msg
 
 type alias Model =
   { form : Form CustomError Recipe
-  , recipe : Maybe Recipe
+  , recipeMaybe : Maybe Recipe
   }
 
 type CustomError
@@ -31,6 +31,15 @@ type alias Item =
   , amount : String
   , measurement : String
   }
+
+itemString : Item -> String
+itemString item =
+  item.amount ++ " " ++ item.measurement ++ " of " ++ item.ingredient
+
+recipeString : Recipe -> String
+recipeString recipe =
+  "scale: " ++ (List.foldl (\x acc -> (itemString x) ++ acc ) "" recipe.items)
+  ++ " by: " ++ recipe.scale ++ " the amount"
 
 -- VALIDATION
 
