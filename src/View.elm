@@ -6,6 +6,7 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Form exposing (Form, FieldState)
 import Form.Input as Input
+import Form.Error exposing (Error, ErrorValue)
 import Form.Validate as Validate exposing (..)
 import Model exposing (..)
 
@@ -36,9 +37,9 @@ formView form =
               List.map
                   (itemView form)
                   (Form.getListIndexes "items" form)
-          , Input.textInput
-              scale
-              [ placeholder "Scale" ]
+          , textGroup
+              ("Scale")
+              (scale)
           , div [class "buttons"]
                   [ button
                       [ class "add"
@@ -67,46 +68,74 @@ itemView form i =
         measurement =
            Form.getFieldAsString  ("items." ++ (String.fromInt i) ++ ".measurement") form
 
-        buttonStyle = [ style "color" "blue"
+        selectStyle = [ style "color" "blue"
                                 ]
+        deleteStyle = [ class "remove"
+                              , onClick (Form.RemoveItem "items" i)
+                              , style "background" "red"
+                              ]
         measurementOptions =
-                ( "", "--" ) :: (List.map (\s -> ( s, String.toUpper s )) measurements)
+                ( "", "Measurements" ) :: (List.map (\s -> ( s, String.toUpper s )) measurements)
     in
         div
             [ class "item" ]
             [ Input.textInput
                 ingredient
-                []
+                [placeholder "Ingredient"]
             , Input.textInput
                 amount
-                []
+                [placeholder "Amount"]
             , Input.selectInput
                 measurementOptions
                 measurement
-                buttonStyle
+                selectStyle
             , button
-                [ class "remove"
-                , onClick (Form.RemoveItem "items" i)
-                ]
+                deleteStyle
                 [ text "Remove" ]
             ]
 
-measurements : List String
-measurements =
-  [ "teaspoon"
-  , "tablespoon"
-  , "cup"
-  , "ounce"
-  , "pint"
-  , "quart"
-  , "gallon"
-  , "pound"
-  , "pinch"
-  , "fluid ounce"
-  , "litre"
-  , "millilitre"
-  , "gram"
-  , "milligram"
-  , "kilogram"
-  , "amount"
-  ]
+textGroup :  String -> FieldState CustomError String -> Html Form.Msg
+textGroup str state =
+    formGroup state.liveError
+        [ Input.textInput state
+            [ class "form-control"
+            , value (Maybe.withDefault "" state.value)
+            , placeholder str
+            ]
+        ]
+
+selectGroup : List (String, String) ->  FieldState CustomError String -> Html Form.Msg
+selectGroup options state =
+        formGroup state.liveError
+        [ Input.selectInput options state [ class "form-control" ] ]
+
+formGroup : Maybe (ErrorValue CustomError) -> List (Html Form.Msg) -> Html Form.Msg
+formGroup maybeError inputs =
+    div
+        [ class ("row form-group " ++ (errorClass maybeError)) ]
+        [ colN 5
+            inputs
+        , colN 4
+            [ errorMessage maybeError ]
+        ]
+
+colN : Int -> List (Html Form.Msg) -> Html Form.Msg
+colN i content =
+    div [ class ("col-xs-" ++ String.fromInt i) ] content
+
+errorClass : Maybe error -> String
+errorClass maybeError =
+    Maybe.map (\_ -> "has-error") maybeError |> Maybe.withDefault ""
+
+errorMessage : Maybe (ErrorValue CustomError) -> Html Form.Msg
+errorMessage maybeError =
+    case maybeError of
+        Just error ->
+            p
+                [ class "help-block" ]
+                [ text (errorString error)]
+
+        Nothing ->
+            span
+                [ class "help-block" ]
+                [ text "" ]
