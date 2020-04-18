@@ -10,6 +10,7 @@ import Form.Error as Error exposing (Error, ErrorValue)
 type Msg
     = NoOp
     | FormMsg Form.Msg
+    | ChangeScale String
 
 type alias Model =
   { form : Form CustomError Recipe

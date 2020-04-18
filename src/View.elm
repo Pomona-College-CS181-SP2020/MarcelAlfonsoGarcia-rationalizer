@@ -14,7 +14,7 @@ view : (Model, Cmd Msg) -> Html Msg
 view ({ form, inRecipeMaybe, outRecipeMaybe }, _) =
         div
         []
-        [ Html.map FormMsg (formView form)
+        [ Html.map FormMsg (formView form inRecipeMaybe)
         , case inRecipeMaybe of
             Just recipe ->
                 p [ class "submit-success" ] [ text (recipeString recipe) ]
@@ -29,28 +29,30 @@ view ({ form, inRecipeMaybe, outRecipeMaybe }, _) =
                 text ""
         ]
 
-formView : Form CustomError Recipe -> Html Form.Msg
-formView form =
+formView : Form CustomError Recipe -> Maybe Recipe -> Html Form.Msg
+formView form inRecipeMaybe =
   let
-       scale =
-         Form.getFieldAsString "scale" form
+       scale = case inRecipeMaybe of
+                    Just s -> s.scale
+                    Nothing -> 1.0
   in
        div
           [ class "ingredient-list"
            ,  style "color" "green"
            ]
           [ h1 [style "color" "blue"] [text "Let's set the scales"]
-          , Input.textInput
-                    (scale)
-                    [placeholder "Scale"
-                    , onClick (Form.Append "items")]
-          , errorMessage scale
+          -- , Input.textInput
+          --           (scale)
+          --           [placeholder "Scale"
+          --           , onClick (Form.Append "items")]
+          -- , errorMessage scale
           ,   div []
                     [ input
                       [ type_ "range"
                       , Html.Attributes.min "0"
                       , Html.Attributes.max "10"
-                      , value (whatever scale.value)
+                      , value (whatever scale)
+                      , onInput NoOp
                       ] []
                     , text (whatever scale.value)
                     ]
