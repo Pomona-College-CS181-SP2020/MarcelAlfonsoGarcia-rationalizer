@@ -3893,7 +3893,7 @@ var $author$project$Example$emptyRecipe = A2(
 	'empty recipe',
 	function (_v0) {
 		var output = {items: _List_Nil, scale: 0.0};
-		var input = 'I\'m batman';
+		var input = '';
 		return A2(
 			$elm_explorations$test$Expect$equal,
 			$author$project$IngredientParser$parse(input),
@@ -7122,7 +7122,7 @@ var $author$project$Test$Runner$Node$run = F2(
 				update: $author$project$Test$Runner$Node$update
 			});
 	});
-var $author$project$Test$Generated$Main3111653550$main = A2(
+var $author$project$Test$Generated$Main853744226$main = A2(
 	$author$project$Test$Runner$Node$run,
 	{
 		paths: _List_fromArray(
@@ -7130,7 +7130,7 @@ var $author$project$Test$Generated$Main3111653550$main = A2(
 		processes: 4,
 		report: $author$project$Test$Reporter$Reporter$ConsoleReport($author$project$Console$Text$UseColor),
 		runs: $elm$core$Maybe$Nothing,
-		seed: 338769426933544
+		seed: 252516433651970
 	},
 	$elm_explorations$test$Test$concat(
 		_List_fromArray(
@@ -7141,10 +7141,10 @@ var $author$project$Test$Generated$Main3111653550$main = A2(
 				_List_fromArray(
 					[$author$project$Example$emptyRecipe]))
 			])));
-_Platform_export({'Test':{'Generated':{'Main3111653550':{'init':$author$project$Test$Generated$Main3111653550$main($elm$json$Json$Decode$int)(0)}}}});}(this));
+_Platform_export({'Test':{'Generated':{'Main853744226':{'init':$author$project$Test$Generated$Main853744226$main($elm$json$Json$Decode$int)(0)}}}});}(this));
 return this.Elm;
 })({});
-var pipeFilename = "\\\\.\\pipe\\elm_test-37948-1";
+var pipeFilename = "\\\\.\\pipe\\elm_test-19332-1";
 // Make sure necessary things are defined.
 if (typeof Elm === "undefined") {
   throw "test runner config error: Elm is not defined. Make sure you provide a file compiled by Elm!";

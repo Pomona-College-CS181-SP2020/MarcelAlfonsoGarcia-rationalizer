@@ -13,7 +13,8 @@ type Msg
 
 type alias Model =
   { form : Form CustomError Recipe
-  , recipeMaybe : Maybe Recipe
+  , inRecipeMaybe : Maybe Recipe
+  , outRecipeMaybe : Maybe Recipe
   }
 
 type CustomError
@@ -31,6 +32,7 @@ type alias Item =
   { ingredient : String
   , amount : String
   , measurement : String
+  , isScalable : Bool
   }
 
 measurements : List String
@@ -71,7 +73,13 @@ errorString error =
             InvalidMeasurement -> "Please select a valid measurement"
             InvalidAmount -> "This is not a correct amount"
 
-    _ -> "Bruh what did you even do"
+    Error.InvalidFloat -> "Scale is not a correct value"
+
+    Error.Empty -> "Please select a valid measurement"
+
+    Error.InvalidString -> "Please input ingredient"
+
+    _ -> "Error in input"
 
 -- VALIDATION
 
@@ -83,10 +91,11 @@ validate =
 
 validateItem : Validation CustomError Item
 validateItem =
-    map3 Item
+    map4 Item
          (field "ingredient" string)
          (field "amount" validateAmount)
          (field "measurement" validateMeasurement)
+         (field "isScalable" bool)
 
 validateAmount : Validation CustomError String
 validateAmount =
@@ -94,7 +103,7 @@ validateAmount =
           string
           (\s ->
           case s of
-            "one" -> Ok s
+            "2" -> Ok s
             _ -> Err (customError InvalidAmount)
           )
 

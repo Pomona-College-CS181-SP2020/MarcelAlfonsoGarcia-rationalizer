@@ -11,13 +11,19 @@ import Form.Validate as Validate exposing (..)
 import Model exposing (..)
 
 view : (Model, Cmd Msg) -> Html Msg
-view ({ form, recipeMaybe }, _) =
+view ({ form, inRecipeMaybe, outRecipeMaybe }, _) =
         div
         []
         [ Html.map FormMsg (formView form)
-        , case recipeMaybe of
+        , case inRecipeMaybe of
             Just recipe ->
-                p [ class "alert alert-success" ] [ text (recipeString recipe) ]
+                p [ class "submit-success" ] [ text (recipeString recipe) ]
+
+            Nothing ->
+                text ""
+        , case outRecipeMaybe of
+            Just recipe ->
+                p [ class "submit-success" ] [ text (recipeString recipe) ]
 
             Nothing ->
                 text ""
@@ -33,28 +39,39 @@ formView form =
           [ class "ingredient-list"
            ,  style "color" "green"
            ]
-          [ div [ class "items" ] <|
-              List.map
+          [ h1 [style "color" "blue"] [text "Let's set the scales"]
+          , Input.textInput
+                    (scale)
+                    [placeholder "Scale"
+                    , onClick (Form.Append "items")]
+          , errorMessage scale
+          ,   div []
+                    [ input
+                      [ type_ "range"
+                      , Html.Attributes.min "0"
+                      , Html.Attributes.max "10"
+                      , value (whatever scale.value)
+                      ] []
+                    , text (whatever scale.value)
+                    ]
+          , div [ class "items" ] <|
+               (List.map
                   (itemView form)
-                  (Form.getListIndexes "items" form)
-          , textGroup
-              ("Scale")
-              (scale)
+                  (Form.getListIndexes "items" form))
           , div [class "buttons"]
                   [ button
-                      [ class "add"
-                      , onClick (Form.Append "items")
+                      [ class "Reset"
+                      , onClick (Form.Reset [])
                       ]
-                      [ text "Add" ]
-                  ]
-          , div [class "buttons"]
-                  [ button
-                      [ class "submit"
-                      , onClick (Form.Submit)
-                      ]
-                      [ text "Submit" ]
+                      [ text "Reset" ]
                   ]
           ]
+
+whatever : Maybe String -> String
+whatever s =
+  case s of
+    Just x -> x
+    Nothing -> "0"
 
 itemView : Form CustomError Recipe -> Int -> Html Form.Msg
 itemView form i =
@@ -73,7 +90,13 @@ itemView form i =
         deleteStyle = [ class "remove"
                               , onClick (Form.RemoveItem "items" i)
                               , style "background" "red"
+                              , style "color" "white"
                               ]
+        addStyle =  [ class "add"
+                            , onClick (Form.Append "items")
+                            , style "background" "blue"
+                            , style "color" "white"
+                            ]
         measurementOptions =
                 ( "", "Measurements" ) :: (List.map (\s -> ( s, String.toUpper s )) measurements)
     in
@@ -82,59 +105,29 @@ itemView form i =
             [ Input.textInput
                 ingredient
                 [placeholder "Ingredient"]
+            , errorMessage ingredient
             , Input.textInput
                 amount
                 [placeholder "Amount"]
+            , errorMessage amount
             , Input.selectInput
                 measurementOptions
                 measurement
                 selectStyle
+            , errorMessage measurement
+            , button
+                addStyle
+                [text "+"]
             , button
                 deleteStyle
-                [ text "Remove" ]
+                [ text "-" ]
             ]
 
-textGroup :  String -> FieldState CustomError String -> Html Form.Msg
-textGroup str state =
-    formGroup state.liveError
-        [ Input.textInput state
-            [ class "form-control"
-            , value (Maybe.withDefault "" state.value)
-            , placeholder str
-            ]
-        ]
-
-selectGroup : List (String, String) ->  FieldState CustomError String -> Html Form.Msg
-selectGroup options state =
-        formGroup state.liveError
-        [ Input.selectInput options state [ class "form-control" ] ]
-
-formGroup : Maybe (ErrorValue CustomError) -> List (Html Form.Msg) -> Html Form.Msg
-formGroup maybeError inputs =
-    div
-        [ class ("row form-group " ++ (errorClass maybeError)) ]
-        [ colN 5
-            inputs
-        , colN 4
-            [ errorMessage maybeError ]
-        ]
-
-colN : Int -> List (Html Form.Msg) -> Html Form.Msg
-colN i content =
-    div [ class ("col-xs-" ++ String.fromInt i) ] content
-
-errorClass : Maybe error -> String
-errorClass maybeError =
-    Maybe.map (\_ -> "has-error") maybeError |> Maybe.withDefault ""
-
-errorMessage : Maybe (ErrorValue CustomError) -> Html Form.Msg
-errorMessage maybeError =
-    case maybeError of
+errorMessage : FieldState CustomError String -> Html Form.Msg
+errorMessage state =
+    case state.liveError of
         Just error ->
-            p
-                [ class "help-block" ]
-                [ text (errorString error)]
-
+            text (errorString error)
         Nothing ->
             span
                 [ class "help-block" ]
