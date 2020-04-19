@@ -10,7 +10,6 @@ import Form.Error as Error exposing (Error, ErrorValue)
 type Msg
     = NoOp
     | FormMsg Form.Msg
-    | ChangeScale String
 
 type alias Model =
   { form : Form CustomError Recipe
@@ -103,9 +102,11 @@ validateAmount =
   customValidation
           string
           (\s ->
-          case s of
-            "2" -> Ok s
-            _ -> Err (customError InvalidAmount)
+          case List.member (String.trim s) oneToNine of
+            True -> Ok s
+            _ -> case String.toFloat s of
+                  Just x -> Ok s
+                  _ -> Err (customError InvalidAmount)
           )
 
 validateMeasurement : Validation CustomError String
@@ -117,3 +118,45 @@ validateMeasurement =
               True -> Ok s
               _ ->  Err (customError InvalidMeasurement)
           )
+
+----------------------------------------------------
+oneToNine : List String
+oneToNine =
+  [ "one"
+  , "two"
+  , "three"
+  , "four"
+  , "five"
+  , "six"
+  , "seven"
+  , "eight"
+  , "nine"
+  ]
+
+elevenToNineteen : List String
+elevenToNineteen =
+  [ "eleven"
+  , "twelve"
+  , "thirteen"
+  , "fourteen"
+  , "fifteen"
+  , "sixteen"
+  , "seventeen"
+  , "eighteen"
+  , "nineteen"
+  ]
+
+multiplesOfTen : List String
+multiplesOfTen =
+  [
+  "ten"
+  , "twenty"
+  , "thirty"
+  , "fourty"
+  , "fifty"
+  , "sixty"
+  , "seventy"
+  , "eighty"
+  , "ninety"
+  , "one hundred"
+  ]

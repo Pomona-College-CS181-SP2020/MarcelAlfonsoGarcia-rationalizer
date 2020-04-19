@@ -19,10 +19,6 @@ update msg ({ form } as model, _) =
     case msg of
         NoOp ->
             ( model, Cmd.none )
-        ChangeScale v ->
-                case String.toFloat v of
-                      Just i -> ({ model | inRecipeMaybe = model.inRecipeMaybe}, Cmd.none )
-                      Nothing -> ( model, Cmd.none )
         FormMsg formMsg ->
                 case (formMsg, Form.getOutput form) of
                         ( _, Just recipe) ->
