@@ -4,6 +4,8 @@ import Form exposing (Form)
 import Form.Field as Field exposing (Field)
 import Form.Validate as Validate exposing (..)
 import Form.Error as Error exposing (Error, ErrorValue)
+import Lists exposing (measurements, validAmounts)
+import Fraction exposing (..)
 
 -- MODEL
 
@@ -34,26 +36,6 @@ type alias Item =
   , measurement : String
   , isScalable : Bool
   }
-
-measurements : List String
-measurements =
-  [ "teaspoon"
-  , "tablespoon"
-  , "cup"
-  , "ounce"
-  , "pint"
-  , "quart"
-  , "gallon"
-  , "pound"
-  , "pinch"
-  , "fluid ounce"
-  , "litre"
-  , "millilitre"
-  , "gram"
-  , "milligram"
-  , "kilogram"
-  , "amount"
-  ]
 
 itemString : Item -> String
 itemString item =
@@ -102,12 +84,31 @@ validateAmount =
   customValidation
           string
           (\s ->
-          case List.member (String.trim s) oneToNine of
+          case List.member (String.trim s) validAmounts of
             True -> Ok s
             _ -> case String.toFloat s of
-                  Just x -> Ok s
-                  _ -> Err (customError InvalidAmount)
+                     Just x -> Ok s
+                     _ -> case isValidFraction (String.trim s) of
+                              True -> Ok s
+                              False -> Err (customError InvalidAmount)
           )
+
+isValidFraction : String -> Bool
+isValidFraction str =
+  case String.contains "/" str of
+    True -> checkFraction str
+    False -> False
+
+checkFraction : String -> Bool
+checkFraction str =
+  let
+    s = String.split "/" str
+  in
+    case List.head s of
+      Just x -> case List.tail s of
+                            Just y -> True && (List.length s == 2)
+                            Nothing -> False
+      Nothing -> False
 
 validateMeasurement : Validation CustomError String
 validateMeasurement =
@@ -118,45 +119,3 @@ validateMeasurement =
               True -> Ok s
               _ ->  Err (customError InvalidMeasurement)
           )
-
-----------------------------------------------------
-oneToNine : List String
-oneToNine =
-  [ "one"
-  , "two"
-  , "three"
-  , "four"
-  , "five"
-  , "six"
-  , "seven"
-  , "eight"
-  , "nine"
-  ]
-
-elevenToNineteen : List String
-elevenToNineteen =
-  [ "eleven"
-  , "twelve"
-  , "thirteen"
-  , "fourteen"
-  , "fifteen"
-  , "sixteen"
-  , "seventeen"
-  , "eighteen"
-  , "nineteen"
-  ]
-
-multiplesOfTen : List String
-multiplesOfTen =
-  [
-  "ten"
-  , "twenty"
-  , "thirty"
-  , "fourty"
-  , "fifty"
-  , "sixty"
-  , "seventy"
-  , "eighty"
-  , "ninety"
-  , "one hundred"
-  ]

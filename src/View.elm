@@ -9,6 +9,7 @@ import Form.Input as Input
 import Form.Error exposing (Error, ErrorValue)
 import Form.Validate as Validate exposing (..)
 import Model exposing (..)
+import Lists exposing (measurements)
 
 view : (Model, Cmd Msg) -> Html Msg
 view ({ form, inRecipeMaybe, outRecipeMaybe }, _) =
