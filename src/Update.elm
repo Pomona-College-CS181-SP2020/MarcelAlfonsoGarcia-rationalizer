@@ -40,8 +40,8 @@ scaleItem : Float -> Item ->Item
 scaleItem scale item =
                 let
                   newAmt = case String.toFloat (item.amount) of
-                                            Just i -> String.fromFloat (roundToQuarter (i*scale))
-                                            Nothing -> String.fromFloat (roundToQuarter ((parseAmntToFloat item.amount)*scale)) 
+                                            Just i -> String.fromFloat (roundToEighth (i*scale))
+                                            Nothing -> String.fromFloat (roundToEighth ((parseAmntToFloat item.amount)*scale))
                 in
                   { item | amount = newAmt }
                   -- case item.isScalable of
@@ -50,8 +50,8 @@ scaleItem scale item =
                   --   False ->
                   --         { item | amount = item.amount }
 
-roundToQuarter : Float -> Float
-roundToQuarter x =
+roundToEighth : Float -> Float
+roundToEighth x =
     Basics.toFloat (Basics.floor (x * 8)) / 8
 
 parseAmntToFloat : String -> Float
@@ -75,6 +75,10 @@ findIndexHelp index predicate list =
 
         x :: xs ->
             if predicate x then
-                Just index
+                Just (approximateValue index)
             else
                 findIndexHelp (index + 1) predicate xs
+
+approximateValue : Float -> Float
+approximateValue x =
+      Basics.toFloat (Basics.round ((x/9) * 8)) / 8

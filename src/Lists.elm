@@ -36,7 +36,7 @@ validAmounts =
 prefix : String -> String
 prefix s = case s of
                   "" -> ""
-                  _  -> case List.member s ["half", "quarter"] of
+                  _  -> case List.member s ["half"] of
                             True -> " and a " ++ s
                             _ -> " and " ++ s
 
@@ -93,13 +93,12 @@ multiplesOfTen =
 betweenZeroAndOne : List String
 betweenZeroAndOne =
   [ ""
-  , "one half"
-  , "one quarter"
-  , "quarter"
-  , "half"
-  , "three quarters"
   , "one eighth"
+  , "one quarter"
   , "three eighths"
+  , "one half"
+  , "half"
   , "five eighths"
+  , "three quarters"
   , "seven eighths"
   ]
