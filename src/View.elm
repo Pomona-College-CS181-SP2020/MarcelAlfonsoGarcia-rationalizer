@@ -18,40 +18,78 @@ view ({ form, inRecipeMaybe, outRecipeMaybe }, _) =
         [ Html.map FormMsg (formView form inRecipeMaybe)
         , case inRecipeMaybe of
             Just recipe ->
-                    recipeView recipe
+                    div
+                      [ class "submit-success"
+                       , style "margin" "10px"
+                       , style "width" "700px"
+                       , style "border-radius" "5px"
+                       , style "background-color" "#f2f2f2"
+                       , style "float" "right"
+                       -- , style "display" "inline-block"
+                      ]
+                      [ h1
+                          [ style "color" "blue"
+                          , style "padding" "5px 5px"
+                          , style "margin" "5px 0px"
+                          , style "fontFamily" "sans-serif"
+                          , style "text-align" "center"
+                          ]
+                          [text "Is this your recipe?"]
+                      , div [ class "submitted-items" ] <|
+                           (List.map
+                              (recipeView)
+                              (recipe.items))
+                      ]
 
             Nothing ->
                 text ""
         , case outRecipeMaybe of
             Just recipe ->
-                    outputRecipeView recipe
+                    div
+                      [ class "submit-success"
+                       , style "margin" "10px auto"
+                       , style "width" "580px"
+                       , style "border-radius" "5px"
+                       , style "background-color" "#f2f2f2"
+                       , style "clear" "both"
+                      ]
+                      [ h1
+                          [ style "color" "blue"
+                          , style "padding" "5px 5px"
+                          , style "margin" "5px 0px"
+                          , style "text-align" "center"
+                          , style "fontFamily" "sans-serif"
+                          ]
+                          [text "This is my result!"]
+                      , div [ class "submitted-items" ] <|
+                           (List.map
+                              (recipeView)
+                              (recipe.items))
+                      ]
 
             Nothing ->
                 text ""
         ]
 
-recipeView : Recipe -> Html Msg
-recipeView recipe =
+recipeView : Item -> Html Msg
+recipeView item =
                   div
-                    [ class "submit-success"
-                     , style "margin" "10px"
-                     , style "width" "580px"
-                     , style "border-radius" "5px"
-                     , style "background-color" "#f2f2f2"
-                     , style "float" "right"
-                    ]
-                    [ text (recipeString recipe) ]
+                      [ class "submitted-item"
+                      , style "padding" "5px 5px"
+                      , style "margin" "2px auto"
+                      , style "fontFamily" "sans-serif"
+                      , style "fontSize" "32px"
+                      , style "text-align" "center"
+                      ]
+                      [ text (itemString item)
+                      ]
 
-outputRecipeView : Recipe -> Html Msg
-outputRecipeView recipe =
+outputRecipeView : Item -> Html Msg
+outputRecipeView item =
                   div
-                    [ class "submit-success"
-                     , style "margin" "10px auto"
-                     , style "width" "580px"
-                     , style "border-radius" "5px"
-                     , style "background-color" "red"
-                    ]
-                    [ text (recipeString recipe) ]
+                      [ class "submitted-item" ]
+                      [ text (itemString item)
+                      ]
 
 formView : Form CustomError Recipe -> Maybe Recipe -> Html Form.Msg
 formView form inRecipeMaybe =
@@ -62,16 +100,18 @@ formView form inRecipeMaybe =
        div
           [ class "ingredient-list"
            , style "margin" "10px"
-           , style "width" "580px"
+           , style "width" "700px"
            , style "border-radius" "5px"
            , style "background-color" "#f2f2f2"
            , style "float" "left"
+           -- , style "display" "inline-block"
            ]
           [ h1
               [ style "color" "blue"
               , style "padding" "5px 5px"
-              , style "margin" "5px 130px"
+              , style "margin" "5px 0px"
               , style "fontFamily" "sans-serif"
+              , style "text-align" "center"
               ]
               [text "Let's set the scales"]
           , Input.textInput
@@ -81,7 +121,9 @@ formView form inRecipeMaybe =
                     , style "display" "block"
                     , style "width" "50px"
                     , style "padding" "5px 5px"
-                    , style "margin" "4px 10px"
+                    , style "margin-top" "10px"
+                    , style "margin-bottom" "10px"
+                    , style "margin-left" "65px"
                     , style "border" "none"
                     , style "border-radius" "4px"
                     ]
@@ -100,7 +142,7 @@ formView form inRecipeMaybe =
                       , style "padding" "14px 20px"
                       , style "margin-top" "5px"
                       , style "margin-bottom" "10px"
-                      , style "margin-left" "10px"
+                      , style "margin-left" "65px"
                       , style "border" "none"
                       , style "border-radius" "4px"
                       , style "font-size" "16px"
@@ -179,7 +221,15 @@ itemView form i =
             [ class "item" ]
             [ Input.textInput
                 ingredient
-                (inputStyle "Ingredient")
+                [ style "width" "150px"
+                , style "padding" "5px 5px"
+                , style "margin-top" "2px"
+                , style "margin-bottom" "2px"
+                , style "margin-left" "65px"
+                , style "border" "none"
+                , style "border-radius" "4px"
+                , placeholder "Ingredient"
+                ]
             , errorMessage ingredient
             , Input.textInput
                 amount

@@ -27,9 +27,9 @@ measurements =
 validAmounts : List String
 validAmounts =
   let
-    prefix s = case List.member s ["three-quarters", "one half", "one quarter"] of
-                      True -> " and " ++ s
-                      _ -> " and a " ++ s
+    prefix s = case List.member s ["half", "quarter"] of
+                      True -> " and a " ++ s
+                      _ -> " and " ++ s
     prefixedBetweenZeroAndOne = List.map (prefix) betweenZeroAndOne
     concatenate str = List.map ((++) str) prefixedBetweenZeroAndOne
     rationals = List.foldr (\s acc  -> (concatenate s) ++ acc) [] integerAmounts
@@ -90,5 +90,9 @@ betweenZeroAndOne =
   , "one quarter"
   , "quarter"
   , "half"
-  , "three-quarters"
+  , "three quarters"
+  , "one eighth"
+  , "three eighths"
+  , "five eighths"
+  , "seven eighths"
   ]

@@ -28,24 +28,27 @@ update msg ({ form } as model, _) =
 
 -- RATIONALIZER
 
-
-
 rationalize : Recipe -> Maybe Recipe
 rationalize recipe =
                   let
                     newItems = List.map (scaleItem recipe.scale) recipe.items
                   in
-                    Just { recipe | items = newItems, scale = 1 }
+                    Just { recipe | items = newItems }
 
 scaleItem : Float -> Item ->Item
 scaleItem scale item =
                 let
                   newAmt = case String.toFloat (item.amount) of
-                                            Just i -> String.fromFloat (i*scale)
+                                            Just i -> String.fromFloat (roundToQuarter (i*scale))
                                             Nothing -> "0"
                 in
-                  case item.isScalable of
-                    True ->
-                          { item | amount = newAmt }
-                    False ->
-                          { item | amount = item.amount }
+                  { item | amount = newAmt }
+                  -- case item.isScalable of
+                  --   True ->
+                  --         { item | amount = newAmt }
+                  --   False ->
+                  --         { item | amount = item.amount }
+
+roundToQuarter : Float -> Float
+roundToQuarter x =
+    Basics.toFloat (Basics.floor (x * 8)) / 8

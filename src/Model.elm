@@ -5,7 +5,6 @@ import Form.Field as Field exposing (Field)
 import Form.Validate as Validate exposing (..)
 import Form.Error as Error exposing (Error, ErrorValue)
 import Lists exposing (measurements, validAmounts)
-import Fraction exposing (..)
 
 -- MODEL
 
