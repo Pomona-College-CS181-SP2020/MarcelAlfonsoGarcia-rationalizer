@@ -83,7 +83,7 @@ validateAmount =
   customValidation
           string
           (\s ->
-          case List.member (String.trim s) validAmounts of
+          case List.member (String.toLower (String.trim s)) validAmounts of
             True -> Ok s
             _ -> case String.toFloat s of
                      Just x -> Ok s

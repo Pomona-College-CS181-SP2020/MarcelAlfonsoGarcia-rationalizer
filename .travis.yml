@@ -8,9 +8,5 @@ cache:
   directories: # so subsequent builds run faster
     - $HOME/.npm
 
-script:
-  - make clean
-  - make
-
 notifications:
   email: false

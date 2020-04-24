@@ -27,22 +27,27 @@ measurements =
 validAmounts : List String
 validAmounts =
   let
-    prefix s = case List.member s ["half", "quarter"] of
-                      True -> " and a " ++ s
-                      _ -> " and " ++ s
-    prefixedBetweenZeroAndOne = List.map (prefix) betweenZeroAndOne
-    concatenate str = List.map ((++) str) prefixedBetweenZeroAndOne
-    rationals = List.foldr (\s acc  -> (concatenate s) ++ acc) [] integerAmounts
+    concatenate str = case str of
+                                    "" -> betweenZeroAndOne
+                                    _ -> List.map ((++) str) prefixedBetweenZeroAndOne
   in
-    integerAmounts ++ rationals ++ betweenZeroAndOne
+    List.foldr (\s acc  -> (concatenate s) ++ acc) [] ([""] ++ integerAmounts)
+
+prefix : String -> String
+prefix s = case s of
+                  "" -> ""
+                  _  -> case List.member s ["half", "quarter"] of
+                            True -> " and a " ++ s
+                            _ -> " and " ++ s
+
+prefixedBetweenZeroAndOne = List.map (prefix) betweenZeroAndOne
 
 integerAmounts : List String
-integerAmounts =
-  let
-    appendToList str = List.map ((++) (str ++ " ")) oneToNine
-    inBetween = List.foldr (\s acc  -> (appendToList s) ++ acc) [] multiplesOfTen
-  in
-    oneToNine ++ elevenToNineteen ++ multiplesOfTen ++ inBetween
+integerAmounts = List.foldr (\s acc  -> (appendToList s) ++ acc) [] multiplesOfTen
+
+appendToList str = case str of
+                                 "" -> oneToNine ++ tenToNineteen
+                                 _ -> [str] ++ List.map ((++) (str ++ " ")) oneToNine
 
 oneToNine : List String
 oneToNine =
@@ -57,9 +62,10 @@ oneToNine =
   , "nine"
   ]
 
-elevenToNineteen : List String
-elevenToNineteen =
-  [ "eleven"
+tenToNineteen : List String
+tenToNineteen =
+  [ "ten"
+  , "eleven"
   , "twelve"
   , "thirteen"
   , "fourteen"
@@ -72,7 +78,7 @@ elevenToNineteen =
 
 multiplesOfTen : List String
 multiplesOfTen =
-  [ "ten"
+  [ ""
   , "twenty"
   , "thirty"
   , "fourty"
@@ -86,7 +92,8 @@ multiplesOfTen =
 
 betweenZeroAndOne : List String
 betweenZeroAndOne =
-  [ "one half"
+  [ ""
+  , "one half"
   , "one quarter"
   , "quarter"
   , "half"
