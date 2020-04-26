@@ -32,13 +32,14 @@ type alias Recipe =
 type alias Item =
   { ingredient : String
   , amount : String
-  , measurement : String
+  , currMeasurement : String
+  , newMeasurement : String
   , isScalable : Bool
   }
 
 itemString : Item -> String
 itemString item =
-  item.amount ++ " " ++ item.measurement ++ " of " ++ item.ingredient ++ "\r\n"
+  item.amount ++ " " ++ item.currMeasurement ++ " of " ++ item.ingredient ++ "\r\n"
 
 recipeString : Recipe -> String
 recipeString recipe =
@@ -72,10 +73,11 @@ validate =
 
 validateItem : Validation CustomError Item
 validateItem =
-    map4 Item
+    map5 Item
          (field "ingredient" string)
          (field "amount" validateAmount)
-         (field "measurement" validateMeasurement)
+         (field "currMeasurement" validateMeasurement)
+         (field "newMeasurement" validateMeasurement)
          (field "isScalable" bool)
 
 validateAmount : Validation CustomError String
@@ -95,19 +97,28 @@ validateAmount =
 isValidFraction : String -> Bool
 isValidFraction str =
   case String.contains "/" str of
-    True -> checkFraction str
+    True -> checkFraction (String.split "/" str)
     False -> False
 
-checkFraction : String -> Bool
-checkFraction str =
-  let
-    s = String.split "/" str
-  in
-    case List.head s of
-      Just x -> case List.tail s of
-                            Just y -> True && (List.length s == 2)
+checkFraction : List String -> Bool
+checkFraction l =
+    case List.head l of
+      Just x -> case last l of
+                            Just y -> True && (List.length l == 2) && checkFloats x y
                             Nothing -> False
       Nothing -> False
+
+checkFloats : String -> String -> Bool
+checkFloats x y =
+    case String.toInt x of
+      Just i -> case String.toInt y of
+                      Just 0 -> False
+                      Nothing -> False
+                      Just j -> True
+      Nothing -> False
+
+last :  List a -> Maybe a
+last l = List.head (List.reverse l)
 
 validateMeasurement : Validation CustomError String
 validateMeasurement =

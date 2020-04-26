@@ -23,6 +23,15 @@ measurements =
   , "amount"
   ]
 
+conversions : List (String, String, Float)
+conversions =
+    [ ("teaspoon", "tablespoon", 1.0)
+    , ("teaspoon", "tablespoon", 1.0)
+    , ("teaspoon", "tablespoon", 1.0)
+    , ("teaspoon", "tablespoon", 1.0)
+    , ("teaspoon", "tablespoon", 1.0)
+    , ("teaspoon", "tablespoon", 1.0)
+    ]
 -- AMOUNTS
 validAmounts : List String
 validAmounts =

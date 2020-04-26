@@ -60,7 +60,7 @@ parseAmntToFloat amount =
                   Just i -> i
                   Nothing -> case findIndex amount of
                                       Just l -> l
-                                      Nothing -> 0
+                                      Nothing -> findFractionValue amount
 
 
 findIndex : String-> Maybe Float
@@ -75,10 +75,29 @@ findIndexHelp index predicate list =
 
         x :: xs ->
             if predicate x then
-                Just (approximateValue index)
+                Just (roundToEighth (index/9))
             else
                 findIndexHelp (index + 1) predicate xs
 
-approximateValue : Float -> Float
-approximateValue x =
-      Basics.toFloat (Basics.round ((x/9) * 8)) / 8
+findFractionValue : String -> Float
+findFractionValue string =
+    let
+      s = String.split "/" string
+    in
+      case isValidFraction string of
+        True -> case List.head s of
+                        Just x -> case last s of
+                                              Just y -> divide x y
+                                              Nothing -> 0.0
+                        Nothing -> 0.0
+        False -> 0.0
+
+divide : String -> String  -> Float
+divide x y =
+  case String.toFloat x of
+    Just i -> case String.toFloat y of
+                    Just j -> case j == 0 of
+                                    True -> 0
+                                    False -> i/j
+                    Nothing -> 0
+    Nothing -> 0

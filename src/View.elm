@@ -95,7 +95,6 @@ outputRecipeView item =
         [ text (itemString item)
         ]
 
-
 formView : Form CustomError Recipe -> Maybe Recipe -> Html Form.Msg
 formView form inRecipeMaybe =
     let
@@ -129,7 +128,7 @@ formView form inRecipeMaybe =
             , style "padding" "5px 5px"
             , style "margin-top" "10px"
             , style "margin-bottom" "10px"
-            , style "margin-left" "65px"
+            , style "margin-left" "20px"
             , style "border" "none"
             , style "border-radius" "4px"
             ]
@@ -142,13 +141,13 @@ formView form inRecipeMaybe =
             [ button
                 [ class "Reset"
                 , onClick (Form.Reset [])
-                , style "width" "560px"
+                , style "width" "660px"
                 , style "background-color" "green"
                 , style "color" "white"
                 , style "padding" "14px 20px"
                 , style "margin-top" "5px"
                 , style "margin-bottom" "10px"
-                , style "margin-left" "65px"
+                , style "margin-left" "20px"
                 , style "border" "none"
                 , style "border-radius" "4px"
                 , style "font-size" "16px"
@@ -156,17 +155,6 @@ formView form inRecipeMaybe =
                 [ text "Reset" ]
             ]
         ]
-
-
-whatever : Maybe String -> String
-whatever s =
-    case s of
-        Just x ->
-            x
-
-        Nothing ->
-            "0"
-
 
 itemView : Form CustomError Recipe -> Int -> Html Form.Msg
 itemView form i =
@@ -177,26 +165,29 @@ itemView form i =
         amount =
             Form.getFieldAsString ("items." ++ String.fromInt i ++ ".amount") form
 
-        measurement =
-            Form.getFieldAsString ("items." ++ String.fromInt i ++ ".measurement") form
+        currMeasurement =
+            Form.getFieldAsString ("items." ++ String.fromInt i ++ ".currMeasurement") form
+
+        newMeasurement =
+            Form.getFieldAsString ("items." ++ String.fromInt i ++ ".newMeasurement") form
 
         inputStyle s =
             [ style "width" "150px"
             , style "padding" "5px 5px"
             , style "margin-top" "2px"
             , style "margin-bottom" "2px"
-            , style "margin-left" "10px"
+            , style "margin-left" "5px"
             , style "border" "none"
             , style "border-radius" "4px"
             , placeholder s
             ]
 
         selectStyle =
-            [ style "width" "150px"
+            [ style "width" "130px"
             , style "padding" "5px 5px"
             , style "margin-top" "2px"
             , style "margin-bottom" "2px"
-            , style "margin-left" "10px"
+            , style "margin-left" "5px"
             , style "border" "none"
             , style "border-radius" "4px"
             ]
@@ -227,7 +218,7 @@ itemView form i =
             , style "padding" "5px 10px"
             , style "margin-top" "2px"
             , style "margin-bottom" "2px"
-            , style "margin-left" "10px"
+            , style "margin-left" "5px"
             , style "border" "none"
             , style "border-radius" "4px"
             , style "font-size" "16px"
@@ -235,6 +226,9 @@ itemView form i =
 
         measurementOptions =
             ( "", "Measurements" ) :: List.map (\s -> ( s, String.toUpper s )) measurements
+
+        newMeasurementOptions =
+            ( "", "Measurements" ) :: List.map (\s -> ( s, String.toUpper s )) (remove currMeasurement measurements)
     in
     div
         [ class "item" ]
@@ -244,7 +238,7 @@ itemView form i =
             , style "padding" "5px 5px"
             , style "margin-top" "2px"
             , style "margin-bottom" "2px"
-            , style "margin-left" "65px"
+            , style "margin-left" "20px"
             , style "border" "none"
             , style "border-radius" "4px"
             , placeholder "Ingredient"
@@ -256,9 +250,14 @@ itemView form i =
         , errorMessage amount
         , Input.selectInput
             measurementOptions
-            measurement
+            currMeasurement
             selectStyle
-        , errorMessage measurement
+        , errorMessage currMeasurement
+        , Input.selectInput
+            measurementOptions
+            newMeasurement
+            selectStyle
+        , errorMessage currMeasurement
         , button
             addStyle
             [ text "+" ]
@@ -278,3 +277,8 @@ errorMessage state =
             span
                 [ class "help-block" ]
                 [ text "" ]
+
+
+remove : a -> List a -> List a
+remove x l =
+  List.foldr (\s acc -> if x == s then acc else acc ++ [x]) [] l
