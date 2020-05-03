@@ -15,7 +15,13 @@ import Model exposing (..)
 view : ( Model, Cmd Msg ) -> Html Msg
 view ( { form, inRecipeMaybe, outRecipeMaybe }, _ ) =
     div
-        []
+        [  style "background-color" "#1abc9c"
+        -- style "background-image" "url(https://images-na.ssl-images-amazon.com/images/I/712FtCEg5BL._AC_SL1000_.jpg)"
+        -- , style "background-repeat" "no-repeat"
+        , style "background-size" "cover"
+        , style "width" "100vw"
+        , style "height" "100vh"
+        ]
         [ Html.map FormMsg (formView form inRecipeMaybe)
         , case inRecipeMaybe of
             Just recipe ->
@@ -23,18 +29,18 @@ view ( { form, inRecipeMaybe, outRecipeMaybe }, _ ) =
                     [ class "submit-success"
                     , style "margin" "10px"
                     , style "width" "700px"
+                    , style "height" "190px"
                     , style "border-radius" "5px"
-                    , style "background-color" "#f2f2f2"
+                  --  , style "background-color" "#1abc9c"
                     , style "float" "right"
-
-                    -- , style "display" "inline-block"
                     ]
                     [ h1
-                        [ style "color" "blue"
+                        [ style "color" "white"
                         , style "padding" "5px 5px"
                         , style "margin" "5px 0px"
                         , style "fontFamily" "sans-serif"
                         , style "text-align" "center"
+                        , style "font-size" "45px"
                         ]
                         [ text "Is this your recipe?" ]
                     , div [ class "submitted-items" ] <|
@@ -52,15 +58,16 @@ view ( { form, inRecipeMaybe, outRecipeMaybe }, _ ) =
                     , style "margin" "10px auto"
                     , style "width" "580px"
                     , style "border-radius" "5px"
-                    , style "background-color" "#f2f2f2"
+                  --  , style "background-color" "#1abc9c"
                     , style "clear" "both"
                     ]
                     [ h1
-                        [ style "color" "blue"
+                        [ style "color" "white"
                         , style "padding" "5px 5px"
                         , style "margin" "5px 0px"
                         , style "text-align" "center"
                         , style "fontFamily" "sans-serif"
+                        , style "font-size" "45px"
                         ]
                         [ text "This is my result!" ]
                     , div [ class "submitted-items" ] <|
@@ -106,54 +113,43 @@ formView form inRecipeMaybe =
         , style "margin" "10px"
         , style "width" "700px"
         , style "border-radius" "5px"
-        , style "background-color" "#f2f2f2"
+      --  , style "background-color" "#1abc9c"
         , style "float" "left"
-
-        -- , style "display" "inline-block"
         ]
         [ h1
-            [ style "color" "blue"
+            [ style "color" "white"
             , style "padding" "5px 5px"
             , style "margin" "5px 0px"
             , style "fontFamily" "sans-serif"
             , style "text-align" "center"
+            , style "font-size" "45px"
             ]
             [ text "Let's set the scales" ]
-        , Input.textInput
-            scale
-            [ placeholder "Scale"
-            , onClick (Form.Append "items")
-            , style "display" "block"
-            , style "width" "50px"
-            , style "padding" "5px 5px"
-            , style "margin-top" "10px"
-            , style "margin-bottom" "10px"
-            , style "margin-left" "20px"
-            , style "border" "none"
-            , style "border-radius" "4px"
-            ]
-        , errorMessage scale
-        , div [ class "items" ] <|
-            List.map
-                (itemView form)
-                (Form.getListIndexes "items" form)
+        , scaleInput scale
         , div [ class "buttons" ]
             [ button
                 [ class "Reset"
                 , onClick (Form.Reset [])
-                , style "width" "660px"
-                , style "background-color" "green"
+                , style "width" "60px"
+                , style "background-color" "#ff6200"
                 , style "color" "white"
-                , style "padding" "14px 20px"
+                , style "padding" "14px 10px"
                 , style "margin-top" "5px"
                 , style "margin-bottom" "10px"
-                , style "margin-left" "20px"
+                , style "margin-right" "20px"
                 , style "border" "none"
                 , style "border-radius" "4px"
                 , style "font-size" "16px"
+                , style "float" "right"
                 ]
                 [ text "Reset" ]
             ]
+        , div [ class "items"
+                , style "clear" "both"
+                ] <|
+                List.map
+                    (itemView form)
+                    (Form.getListIndexes "items" form)
         ]
 
 itemView : Form CustomError Recipe -> Int -> Html Form.Msg
@@ -170,27 +166,6 @@ itemView form i =
 
         newMeasurement =
             Form.getFieldAsString ("items." ++ String.fromInt i ++ ".newMeasurement") form
-
-        inputStyle s =
-            [ style "width" "150px"
-            , style "padding" "5px 5px"
-            , style "margin-top" "2px"
-            , style "margin-bottom" "2px"
-            , style "margin-left" "5px"
-            , style "border" "none"
-            , style "border-radius" "4px"
-            , placeholder s
-            ]
-
-        selectStyle =
-            [ style "width" "130px"
-            , style "padding" "5px 5px"
-            , style "margin-top" "2px"
-            , style "margin-bottom" "2px"
-            , style "margin-left" "5px"
-            , style "border" "none"
-            , style "border-radius" "4px"
-            ]
 
         deleteStyle =
             [ class "remove"
@@ -227,37 +202,15 @@ itemView form i =
         measurementOptions =
             ( "", "Measurements" ) :: List.map (\s -> ( s, String.toUpper s )) measurements
 
-        newMeasurementOptions =
-            ( "", "Measurements" ) :: List.map (\s -> ( s, String.toUpper s )) (remove currMeasurement measurements)
+        -- newMeasurementOptions =
+        --     ( "", "Measurements" ) :: List.map (\s -> ( s, String.toUpper s )) (remove currMeasurement measurements)
     in
     div
         [ class "item" ]
-        [ Input.textInput
-            ingredient
-            [ style "width" "150px"
-            , style "padding" "5px 5px"
-            , style "margin-top" "2px"
-            , style "margin-bottom" "2px"
-            , style "margin-left" "20px"
-            , style "border" "none"
-            , style "border-radius" "4px"
-            , placeholder "Ingredient"
-            ]
-        , errorMessage ingredient
-        , Input.textInput
-            amount
-            (inputStyle "Amount")
-        , errorMessage amount
-        , Input.selectInput
-            measurementOptions
-            currMeasurement
-            selectStyle
-        , errorMessage currMeasurement
-        , Input.selectInput
-            measurementOptions
-            newMeasurement
-            selectStyle
-        , errorMessage currMeasurement
+        [ ingredientInput ingredient
+        , amountInput amount
+        , selectInput currMeasurement measurementOptions
+        , selectInput newMeasurement measurementOptions
         , button
             addStyle
             [ text "+" ]
@@ -266,17 +219,160 @@ itemView form i =
             [ text "-" ]
         ]
 
+scaleInput : FieldState CustomError String -> Html Form.Msg
+scaleInput state =
+  let
+          errorStyle =
+              [ placeholder "Scale"
+              , onClick (Form.Append "items")
+              , style "display" "block"
+              , style "width" "50px"
+              , style "padding" "14px 10px"
+              , style "margin-top" "10px"
+              , style "margin-bottom" "10px"
+              , style "margin-left" "20px"
+              , style "box-shadow" "0px 0px 10px red"
+              , style "border-color" "red"
+              , style "border-radius" "0.5px"
+              , style "float" "left"
+              ]
 
-errorMessage : FieldState CustomError String -> Html Form.Msg
-errorMessage state =
-    case state.liveError of
-        Just error ->
-            text (errorString error)
+          normalStyle =
+                [ placeholder "Scale"
+                , onClick (Form.Append "items")
+                , style "display" "block"
+                , style "width" "50px"
+                , style "padding" "14px 10px"
+                , style "margin-top" "10px"
+                , style "margin-bottom" "10px"
+                , style "margin-left" "20px"
+                , style "border" "none"
+                , style "border-radius" "4px"
+                , style "float" "left"
+                ]
+  in
+      case state.liveError of
+          Just error ->
+              Input.textInput
+                  state
+                  (errorStyle)
 
-        Nothing ->
-            span
-                [ class "help-block" ]
-                [ text "" ]
+          Nothing ->
+              Input.textInput
+                  state
+                  (normalStyle)
+
+ingredientInput : FieldState CustomError String -> Html Form.Msg
+ingredientInput state =
+  let
+          errorStyle =
+              [ style "width" "150px"
+              , style "padding" "5px 5px"
+              , style "margin-top" "2px"
+              , style "margin-bottom" "2px"
+              , style "margin-left" "20px"
+              , style "border-color" "red"
+              , style "border-color" "red"
+              , style "border-radius" "0.5px"
+              , style "box-shadow" "0px 0px 5px red"
+              , placeholder "Ingredient"
+              ]
+
+          normalStyle =
+                [ style "width" "150px"
+                , style "padding" "5px 5px"
+                , style "margin-top" "2px"
+                , style "margin-bottom" "2px"
+                , style "margin-left" "20px"
+                , style "border" "none"
+                , style "border-radius" "4px"
+                , placeholder "Ingredient"
+                ]
+  in
+      case state.liveError of
+          Just error ->
+              Input.textInput
+                  state
+                  (errorStyle)
+
+          Nothing ->
+              Input.textInput
+                  state
+                  (normalStyle)
+
+amountInput : FieldState CustomError String -> Html Form.Msg
+amountInput state =
+  let
+          errorStyle =
+              [ style "width" "150px"
+              , style "padding" "5px 5px"
+              , style "margin-top" "2px"
+              , style "margin-bottom" "2px"
+              , style "margin-left" "5px"
+              , style "box-shadow" "0px 0px 5px red"
+              , style "border-color" "red"
+              , style "border-radius" "0.5px"
+              , placeholder "Amount"
+              ]
+
+          normalStyle =
+                [ style "width" "150px"
+                , style "padding" "5px 5px"
+                , style "margin-top" "2px"
+                , style "margin-bottom" "2px"
+                , style "margin-left" "5px"
+                , style "border" "none"
+                , style "border-radius" "4px"
+                , placeholder "Amount"
+                ]
+  in
+      case state.liveError of
+          Just error ->
+              Input.textInput
+                  state
+                  (errorStyle)
+
+          Nothing ->
+              Input.textInput
+                  state
+                  (normalStyle)
+
+selectInput : FieldState CustomError String -> List (String, String) -> Html Form.Msg
+selectInput state options=
+  let
+          errorStyle =
+              [ style "width" "130px"
+              , style "padding" "5px 5px"
+              , style "margin-top" "2px"
+              , style "margin-bottom" "2px"
+              , style "margin-left" "5px"
+              , style "box-shadow" "0px 0px 5px red"
+              , style "border-color" "red"
+              , style "border-radius" "0.5px"
+              ]
+
+          normalStyle =
+                [ style "width" "130px"
+                , style "padding" "5px 5px"
+                , style "margin-top" "2px"
+                , style "margin-bottom" "2px"
+                , style "margin-left" "5px"
+                , style "border" "none"
+                , style "border-radius" "4px"
+                ]
+  in
+      case state.liveError of
+          Just error ->
+              Input.selectInput
+                  options
+                  state
+                  errorStyle
+
+          Nothing ->
+              Input.selectInput
+                  options
+                  state
+                  normalStyle
 
 
 remove : a -> List a -> List a

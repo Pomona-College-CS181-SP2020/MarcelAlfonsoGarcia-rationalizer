@@ -2,7 +2,7 @@ module Update exposing (..)
 
 import Form exposing (Form)
 import Model exposing (..)
-import Lists exposing (validAmounts)
+import Lists exposing (validAmounts, conversions)
 
 -- INITIALIZER
 
@@ -33,8 +33,33 @@ rationalize : Recipe -> Maybe Recipe
 rationalize recipe =
                   let
                     newItems = List.map (scaleItem recipe.scale) recipe.items
+                    -- newItems = List.map (changeMeasurement) recipe.items
                   in
                     Just { recipe | items = newItems }
+
+changeMeasurement : Item -> Item
+changeMeasurement item =
+  let
+    from = item.currMeasurement
+    to = item.newMeasurement
+    val = case String.toFloat (item.amount) of
+                              Just i -> i
+                              Nothing -> parseAmntToFloat item.amount
+  in
+    if from == to then item
+    else case findDirectConversion from to of
+              Just x -> { item | amount = String.fromFloat (val*x), currMeasurement = to }
+              Nothing -> item
+
+findDirectConversion : String -> String -> Maybe Float
+findDirectConversion from to =
+  List.foldr
+  (\(x,y,val) acc ->
+            if x == from && y == to then Just val
+            else if x == to && y == from then Just (1/val)
+            else acc)
+  Nothing
+  conversions
 
 scaleItem : Float -> Item ->Item
 scaleItem scale item =

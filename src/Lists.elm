@@ -14,24 +14,45 @@ measurements =
   , "gallon"
   , "pound"
   , "pinch"
+  , "dash"
   , "fluid ounce"
-  , "litre"
-  , "millilitre"
+  , "liter"
+  , "milliliter"
   , "gram"
   , "milligram"
   , "kilogram"
-  , "amount"
   ]
 
 conversions : List (String, String, Float)
 conversions =
-    [ ("teaspoon", "tablespoon", 1.0)
-    , ("teaspoon", "tablespoon", 1.0)
-    , ("teaspoon", "tablespoon", 1.0)
-    , ("teaspoon", "tablespoon", 1.0)
-    , ("teaspoon", "tablespoon", 1.0)
-    , ("teaspoon", "tablespoon", 1.0)
+    [ ("tablespoon", "teaspoon", 3.0)
+    , ("tablespoon", "milliliter", 15.0)
+    , ("cup", "ounce", 8.0)
+    , ("cup", "fluid ounce", 8.0)
+    , ("cup", "milliliter", 240.0)
+    , ("cup", "tablespoon", 16.0)
+    , ("liter", "milliliter", 1000.0)
+    , ("gram", "milligram", 1000.0)
+    , ("kilogram", "gram", 100.0)
+    , ("ounce", "gram", 29.0)
+    , ("ounce", "tablespoon", 2.0)
+    , ("pound", "gram", 453.0)
+    , ("quart", "pint", 2.0)
+    , ("quart", "cup", 4.0)
+    , ("quart", "ounce", 32.0)
+    , ("quart", "milliliter", 950.0)
+    , ("pint", "cup", 2.0)
+    , ("pint", "ounce", 16.0)
+    , ("pinch", "teaspoon", 0.0625)
+    , ("dash", "teaspoon", 0.125)
+    , ("gallon", "quart", 4.0)
+    , ("gallon", "pint", 8.0)
+    , ("gallon", "cup", 16.0)
+    , ("gallon", "fluid ounce", 128.0)
+    , ("fluid ounce", "tablespoon", 2.0)
+    , ("fluid ounce", "teaspoon", 6.0)
     ]
+
 -- AMOUNTS
 validAmounts : List String
 validAmounts =
