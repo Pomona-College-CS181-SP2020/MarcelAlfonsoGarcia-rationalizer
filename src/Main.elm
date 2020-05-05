@@ -1,12 +1,16 @@
 module Main exposing (..)
 
 import Browser
-import View exposing (view)
 import Update exposing (init, update)
+import View exposing (view)
+
+
 
 -- MAIN
 
-main = Browser.sandbox
+
+main =
+    Browser.sandbox
         { init = init
         , view = view
         , update = update
