@@ -37,3 +37,9 @@ Travis CI seems to accept elm now, but is failing when trying to run elm-format
 Cannot figure out how to add the first ingredient input fields without using scale
 Making the conversions will require a lot of graph algorithms work
 Having problems formatting error messages to look nicely
+  Soln: I figured out how to make the inputs highlight in red if there is an error, made error message just appear on top of input box
+
+# 5/4/2020
+Travis CI seems to accept elm now, but is failing when trying to run elm-format
+Cannot figure out how to add the first ingredient input fields without using scale
+Making the conversions will require a lot of graph algorithms work
