@@ -20,7 +20,7 @@ testIsValidFraction =
                     [ "3/2", "1", "1/0", "a", "1/a", "1+1/2", "1 1/2", "1.0/2.0", "" ]
 
                 output =
-                    [ True, False, False, False, False, False, False, True, False ]
+                    [ True, False, False, False, False, False, False, False, False ]
             in
             Expect.equal (List.map isValidFraction input) output
 
@@ -58,7 +58,7 @@ testRationalize =
         \_ ->
             let
                 item =
-                    { ingredient = "a", amount = "one", currMeasurement = "cup", newMeasurement = "pound", isScalable = True }
+                    { ingredient = "a", amount = "1", currMeasurement = "cup", newMeasurement = "pound", isScalable = True }
 
                 input =
                     { items = [ item ], scale = 1 }
