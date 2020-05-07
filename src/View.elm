@@ -427,7 +427,7 @@ remove x l =
 itemString : Item -> String
 itemString item =
     if parseAmntToFloat item.amount == 1.0 then
-        item.amount ++ " " ++ item.newMeasurement ++ " of " ++ item.ingredient ++ "\u{000D}\n"
+        item.amount ++ " " ++ item.currMeasurement ++ " of " ++ item.ingredient ++ "\u{000D}\n"
 
     else
-        item.amount ++ " " ++ item.newMeasurement ++ "s of " ++ item.ingredient ++ "\u{000D}\n"
+        item.amount ++ " " ++ item.currMeasurement ++ "s of " ++ item.ingredient ++ "\u{000D}\n"

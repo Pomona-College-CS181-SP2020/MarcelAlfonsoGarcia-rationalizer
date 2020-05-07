@@ -53,6 +53,15 @@ rationalize recipe =
     Just { recipe | items = newItems }
 
 
+scaleItem : Float -> Item -> Item
+scaleItem scale item =
+    let
+        newAmt =
+            String.fromFloat (roundToEighth (parseAmntToFloat item.amount * scale))
+    in
+    changeMeasurement { item | amount = newAmt }
+
+
 changeMeasurement : Item -> Item
 changeMeasurement item =
     let
@@ -76,7 +85,7 @@ changeMeasurement item =
     else
         case findDirectConversion from to of
             Just x ->
-                { item | amount = String.fromFloat (val * x), currMeasurement = to }
+                { item | amount = String.fromFloat (roundToEighth (val * x)), currMeasurement = to }
 
             Nothing ->
                 item
@@ -93,19 +102,10 @@ findDirectConversion from to =
                 Just (1 / val)
 
             else
-                acc
+                Nothing
         )
         Nothing
         conversions
-
-
-scaleItem : Float -> Item -> Item
-scaleItem scale item =
-    let
-        newAmt =
-            String.fromFloat (roundToEighth (parseAmntToFloat item.amount * scale))
-    in
-    { item | amount = newAmt }
 
 
 
@@ -116,23 +116,13 @@ scaleItem scale item =
 --         { item | amount = item.amount }
 
 
-parseAmntToFloat : String -> Float
-parseAmntToFloat str =
-    case String.toFloat str of
-        Just i ->
-            i
-
-        Nothing ->
-            parseWordToFloat str
-
-
 roundToEighth : Float -> Float
 roundToEighth x =
     Basics.toFloat (Basics.floor (x * 8)) / 8
 
 
-parseWordToFloat : String -> Float
-parseWordToFloat amount =
+parseAmntToFloat : String -> Float
+parseAmntToFloat amount =
     case String.toFloat amount of
         Just i ->
             i
