@@ -155,7 +155,7 @@ testFindFractionValue =
     test "find the value of a fraction" <|
         \_ ->
             let
-                int =
+                input =
                     [ "2", "1/2", "1/0", "a", "", "1/a", "a/1", "0" ]
 
                 output =
