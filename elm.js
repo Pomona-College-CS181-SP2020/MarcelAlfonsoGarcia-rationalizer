@@ -5361,27 +5361,10 @@ var $etaque$elm_form$Form$Validate$map2 = F3(
 			v2,
 			A2($etaque$elm_form$Form$Validate$map, func, v1));
 	});
-var $author$project$Model$Item = F5(
-	function (ingredient, amount, currMeasurement, newMeasurement, isScalable) {
-		return {amount: amount, currMeasurement: currMeasurement, ingredient: ingredient, isScalable: isScalable, newMeasurement: newMeasurement};
+var $author$project$Model$Item = F4(
+	function (ingredient, amount, currMeasurement, newMeasurement) {
+		return {amount: amount, currMeasurement: currMeasurement, ingredient: ingredient, newMeasurement: newMeasurement};
 	});
-var $etaque$elm_form$Form$Field$asBool = function (field) {
-	if ((field.$ === 'Value') && (field.a.$ === 'Bool')) {
-		var b = field.a.a;
-		return $elm$core$Maybe$Just(b);
-	} else {
-		return $elm$core$Maybe$Nothing;
-	}
-};
-var $etaque$elm_form$Form$Validate$bool = function (v) {
-	var _v0 = $etaque$elm_form$Form$Field$asBool(v);
-	if (_v0.$ === 'Just') {
-		var b = _v0.a;
-		return $elm$core$Result$Ok(b);
-	} else {
-		return $elm$core$Result$Ok(false);
-	}
-};
 var $etaque$elm_form$Form$Validate$map3 = F4(
 	function (func, v1, v2, v3) {
 		return A2(
@@ -5396,13 +5379,22 @@ var $etaque$elm_form$Form$Validate$map4 = F5(
 			v4,
 			A4($etaque$elm_form$Form$Validate$map3, func, v1, v2, v3));
 	});
-var $etaque$elm_form$Form$Validate$map5 = F6(
-	function (func, v1, v2, v3, v4, v5) {
-		return A2(
-			$etaque$elm_form$Form$Validate$andMap,
-			v5,
-			A5($etaque$elm_form$Form$Validate$map4, func, v1, v2, v3, v4));
-	});
+var $etaque$elm_form$Form$Error$Empty = {$: 'Empty'};
+var $etaque$elm_form$Form$Error$InvalidString = {$: 'InvalidString'};
+var $elm$core$String$isEmpty = function (string) {
+	return string === '';
+};
+var $etaque$elm_form$Form$Validate$string = function (v) {
+	var _v0 = $etaque$elm_form$Form$Field$asString(v);
+	if (_v0.$ === 'Just') {
+		var s = _v0.a;
+		return $elm$core$String$isEmpty(s) ? $elm$core$Result$Err(
+			$etaque$elm_form$Form$Error$value($etaque$elm_form$Form$Error$Empty)) : $elm$core$Result$Ok(s);
+	} else {
+		return $elm$core$Result$Err(
+			$etaque$elm_form$Form$Error$value($etaque$elm_form$Form$Error$InvalidString));
+	}
+};
 var $author$project$Model$InvalidAmount = {$: 'InvalidAmount'};
 var $etaque$elm_form$Form$Error$CustomError = function (a) {
 	return {$: 'CustomError', a: a};
@@ -5519,22 +5511,6 @@ var $elm$core$List$member = F2(
 			},
 			xs);
 	});
-var $etaque$elm_form$Form$Error$Empty = {$: 'Empty'};
-var $etaque$elm_form$Form$Error$InvalidString = {$: 'InvalidString'};
-var $elm$core$String$isEmpty = function (string) {
-	return string === '';
-};
-var $etaque$elm_form$Form$Validate$string = function (v) {
-	var _v0 = $etaque$elm_form$Form$Field$asString(v);
-	if (_v0.$ === 'Just') {
-		var s = _v0.a;
-		return $elm$core$String$isEmpty(s) ? $elm$core$Result$Err(
-			$etaque$elm_form$Form$Error$value($etaque$elm_form$Form$Error$Empty)) : $elm$core$Result$Ok(s);
-	} else {
-		return $elm$core$Result$Err(
-			$etaque$elm_form$Form$Error$value($etaque$elm_form$Form$Error$InvalidString));
-	}
-};
 var $elm$core$String$toLower = _String_toLower;
 var $elm$core$String$trim = _String_trim;
 var $author$project$Lists$betweenZeroAndOne = _List_fromArray(
@@ -5674,7 +5650,7 @@ var $author$project$Model$validateIngredient = A2(
 	});
 var $author$project$Model$InvalidMeasurement = {$: 'InvalidMeasurement'};
 var $author$project$Lists$measurements = _List_fromArray(
-	['teaspoon', 'tablespoon', 'cup', 'ounce', 'pint', 'quart', 'gallon', 'pound', 'pinch', 'dash', 'fluid ounce', 'liter', 'milliliter', 'gram', 'milligram', 'kilogram']);
+	['amount', 'teaspoon', 'tablespoon', 'cup', 'ounce', 'pint', 'quart', 'gallon', 'pound', 'pinch', 'dash', 'fluid ounce', 'liter', 'milliliter', 'gram', 'milligram', 'kilogram']);
 var $author$project$Model$validateMeasurement = A2(
 	$etaque$elm_form$Form$Validate$customValidation,
 	$etaque$elm_form$Form$Validate$string,
@@ -5687,14 +5663,13 @@ var $author$project$Model$validateMeasurement = A2(
 				$etaque$elm_form$Form$Validate$customError($author$project$Model$InvalidMeasurement));
 		}
 	});
-var $author$project$Model$validateItem = A6(
-	$etaque$elm_form$Form$Validate$map5,
+var $author$project$Model$validateItem = A5(
+	$etaque$elm_form$Form$Validate$map4,
 	$author$project$Model$Item,
 	A2($etaque$elm_form$Form$Validate$field, 'ingredient', $author$project$Model$validateIngredient),
 	A2($etaque$elm_form$Form$Validate$field, 'amount', $author$project$Model$validateAmount),
 	A2($etaque$elm_form$Form$Validate$field, 'currMeasurement', $author$project$Model$validateMeasurement),
-	A2($etaque$elm_form$Form$Validate$field, 'newMeasurement', $author$project$Model$validateMeasurement),
-	A2($etaque$elm_form$Form$Validate$field, 'isScalable', $etaque$elm_form$Form$Validate$bool));
+	A2($etaque$elm_form$Form$Validate$field, 'newMeasurement', $etaque$elm_form$Form$Validate$string));
 var $author$project$Model$validate = A3(
 	$etaque$elm_form$Form$Validate$map2,
 	$author$project$Model$Recipe,
@@ -6137,13 +6112,32 @@ var $author$project$Update$changeMeasurement = function (item) {
 };
 var $author$project$Update$scaleItem = F2(
 	function (scale, item) {
-		var newAmt = $elm$core$String$fromFloat(
-			$author$project$Update$roundToEighth(
-				$author$project$Update$parseAmntToFloat(item.amount) * scale));
-		return $author$project$Update$changeMeasurement(
-			_Utils_update(
-				item,
-				{amount: newAmt}));
+		var newAmt = $author$project$Update$roundToEighth(
+			$author$project$Update$parseAmntToFloat(item.amount) * scale);
+		if ($elm$core$String$toLower(item.currMeasurement) === 'amount') {
+			var _v0 = A2(
+				$elm$core$Basics$compare,
+				$elm$core$Basics$floor(newAmt),
+				$elm$core$Basics$ceiling(newAmt));
+			if (_v0.$ === 'EQ') {
+				return $author$project$Update$changeMeasurement(
+					_Utils_update(
+						item,
+						{
+							amount: $elm$core$String$fromInt(
+								$elm$core$Basics$floor(newAmt))
+						}));
+			} else {
+				return $author$project$Update$changeMeasurement(item);
+			}
+		} else {
+			return $author$project$Update$changeMeasurement(
+				_Utils_update(
+					item,
+					{
+						amount: $elm$core$String$fromFloat(newAmt)
+					}));
+		}
 	});
 var $author$project$Update$rationalize = function (recipe) {
 	var newItems = A2(
@@ -7550,13 +7544,24 @@ var $author$project$View$selectInput = F2(
 var $elm$core$String$toUpper = _String_toUpper;
 var $author$project$View$itemView = F2(
 	function (form, i) {
+		var newMeasurementOptions = A2(
+			$elm$core$List$cons,
+			_Utils_Tuple2('', 'New Measurement'),
+			A2(
+				$elm$core$List$map,
+				function (s) {
+					return _Utils_Tuple2(
+						s,
+						$elm$core$String$toUpper(s));
+				},
+				$author$project$Lists$measurements));
 		var newMeasurement = A2(
 			$etaque$elm_form$Form$getFieldAsString,
 			'items.' + ($elm$core$String$fromInt(i) + '.newMeasurement'),
 			form);
 		var measurementOptions = A2(
 			$elm$core$List$cons,
-			_Utils_Tuple2('', 'Measurements'),
+			_Utils_Tuple2('', 'Curr Measurement'),
 			A2(
 				$elm$core$List$map,
 				function (s) {
@@ -7602,7 +7607,7 @@ var $author$project$View$itemView = F2(
 					$author$project$View$ingredientInput(ingredient),
 					$author$project$View$amountInput(amount),
 					A2($author$project$View$selectInput, currMeasurement, measurementOptions),
-					A2($author$project$View$selectInput, newMeasurement, measurementOptions),
+					A2($author$project$View$selectInput, newMeasurement, newMeasurementOptions),
 					A2(
 					$elm$html$Html$button,
 					addStyle,
@@ -7751,8 +7756,12 @@ var $author$project$View$formView = F2(
 	});
 var $elm$virtual_dom$VirtualDom$map = _VirtualDom_map;
 var $elm$html$Html$map = $elm$virtual_dom$VirtualDom$map;
+var $author$project$View$makePlural = F2(
+	function (pluralize, amnt) {
+		return ($author$project$Update$parseAmntToFloat(amnt) === 1.0) ? pluralize : (pluralize + 's');
+	});
 var $author$project$View$itemString = function (item) {
-	return ($author$project$Update$parseAmntToFloat(item.amount) === 1.0) ? (item.amount + (' ' + (item.currMeasurement + (' of ' + (item.ingredient + '\u000D\n'))))) : (item.amount + (' ' + (item.currMeasurement + ('s of ' + (item.ingredient + '\u000D\n')))));
+	return ($elm$core$String$toLower(item.currMeasurement) === 'amount') ? (item.amount + (' ' + (A2($author$project$View$makePlural, item.ingredient, item.amount) + '\u000D\n'))) : (item.amount + (' ' + (A2($author$project$View$makePlural, item.currMeasurement, item.amount) + (' of ' + (item.ingredient + '\u000D\n')))));
 };
 var $author$project$View$recipeView = function (item) {
 	return A2(

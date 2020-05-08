@@ -57,9 +57,18 @@ scaleItem : Float -> Item -> Item
 scaleItem scale item =
     let
         newAmt =
-            String.fromFloat (roundToEighth (parseAmntToFloat item.amount * scale))
+            roundToEighth (parseAmntToFloat item.amount * scale)
     in
-    changeMeasurement { item | amount = newAmt }
+    if String.toLower item.currMeasurement == "amount" then
+        case Basics.compare (Basics.floor newAmt) (Basics.ceiling newAmt) of
+            EQ ->
+                changeMeasurement { item | amount = String.fromInt (Basics.floor newAmt) }
+
+            _ ->
+                changeMeasurement item
+
+    else
+        changeMeasurement { item | amount = String.fromFloat newAmt }
 
 
 changeMeasurement : Item -> Item

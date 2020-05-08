@@ -102,17 +102,17 @@ itemView form i =
             ]
 
         measurementOptions =
-            ( "", "Measurements" ) :: List.map (\s -> ( s, String.toUpper s )) measurements
+            ( "", "Curr Measurement" ) :: List.map (\s -> ( s, String.toUpper s )) measurements
 
-        -- newMeasurementOptions =
-        --     ( "", "Measurements" ) :: List.map (\s -> ( s, String.toUpper s )) (remove currMeasurement measurements)
+        newMeasurementOptions =
+            ( "", "New Measurement" ) :: List.map (\s -> ( s, String.toUpper s )) measurements
     in
     div
         [ class "item" ]
         [ ingredientInput ingredient
         , amountInput amount
         , selectInput currMeasurement measurementOptions
-        , selectInput newMeasurement measurementOptions
+        , selectInput newMeasurement newMeasurementOptions
         , button
             addStyle
             [ text "+" ]
@@ -262,8 +262,17 @@ selectInput state options =
 
 itemString : Item -> String
 itemString item =
-    if parseAmntToFloat item.amount == 1.0 then
-        item.amount ++ " " ++ item.currMeasurement ++ " of " ++ item.ingredient ++ "\u{000D}\n"
+    if String.toLower item.currMeasurement == "amount" then
+        item.amount ++ " " ++ makePlural item.ingredient item.amount ++ "\u{000D}\n"
 
     else
-        item.amount ++ " " ++ item.currMeasurement ++ "s of " ++ item.ingredient ++ "\u{000D}\n"
+        item.amount ++ " " ++ makePlural item.currMeasurement item.amount ++ " of " ++ item.ingredient ++ "\u{000D}\n"
+
+
+makePlural : String -> String -> String
+makePlural pluralize amnt =
+    if parseAmntToFloat amnt == 1.0 then
+        pluralize
+
+    else
+        pluralize ++ "s"

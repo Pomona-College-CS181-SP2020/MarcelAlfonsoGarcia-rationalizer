@@ -41,7 +41,6 @@ type alias Item =
     , amount : String
     , currMeasurement : String
     , newMeasurement : String
-    , isScalable : Bool
     }
 
 
@@ -88,12 +87,11 @@ validate =
 
 validateItem : Validation CustomError Item
 validateItem =
-    map5 Item
+    map4 Item
         (field "ingredient" validateIngredient)
         (field "amount" validateAmount)
         (field "currMeasurement" validateMeasurement)
         (field "newMeasurement" validateMeasurement)
-        (field "isScalable" bool)
 
 
 validateIngredient : Validation CustomError String

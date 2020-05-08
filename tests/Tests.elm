@@ -81,7 +81,7 @@ testRationalizeTripleScale =
                     { items = [ item ], scale = 3 }
 
                 output =
-                    { items = [ { item | amount = "3" } ], scale = 1 }
+                    { items = [ { item | amount = "3" } ], scale = 3 }
             in
             Expect.equal (Just output) (rationalize input)
 
@@ -98,7 +98,7 @@ testRationalizeChangeMeasurement =
                     { items = [ item ], scale = 3 }
 
                 output =
-                    { items = [ { item | amount = "24", currMeasurement = "ounce" } ], scale = 1 }
+                    { items = [ { item | amount = "24", currMeasurement = "ounce" } ], scale = 3 }
             in
             Expect.equal (Just output) (rationalize input)
 
@@ -168,7 +168,7 @@ testFindFractionValue =
                     [ "2", "1/2", "1/0", "a", "", "1/a", "a/1", "0" ]
 
                 output =
-                    [ 2, 0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ]
+                    [ 0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ]
             in
             Expect.equal output (List.map findFractionValue input)
 

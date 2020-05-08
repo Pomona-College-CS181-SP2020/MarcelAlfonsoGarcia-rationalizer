@@ -9,7 +9,8 @@ import Form exposing (..)
 
 measurements : List String
 measurements =
-    [ "teaspoon"
+    [ "amount"
+    , "teaspoon"
     , "tablespoon"
     , "cup"
     , "ounce"
