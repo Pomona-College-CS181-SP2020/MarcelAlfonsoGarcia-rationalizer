@@ -52,9 +52,9 @@ testCheckFraction =
 -- RATIONALIZER TESTING
 
 
-testRationalize : Test
-testRationalize =
-    test "rationalize" <|
+testRationalizeNoScale : Test
+testRationalizeNoScale =
+    test "rationalize with a scale of 1" <|
         \_ ->
             let
                 item =
@@ -65,6 +65,40 @@ testRationalize =
 
                 output =
                     { items = [ item ], scale = 1 }
+            in
+            Expect.equal (Just output) (rationalize input)
+
+
+testRationalizeTripleScale : Test
+testRationalizeTripleScale =
+    test "rationalize with a scale of 3" <|
+        \_ ->
+            let
+                item =
+                    { ingredient = "a", amount = "1", currMeasurement = "cup", newMeasurement = "pound", isScalable = True }
+
+                input =
+                    { items = [ item ], scale = 3 }
+
+                output =
+                    { items = [ { item | amount = "3" } ], scale = 1 }
+            in
+            Expect.equal (Just output) (rationalize input)
+
+
+testRationalizeChangeMeasurement : Test
+testRationalizeChangeMeasurement =
+    test "rationalize with a scale of 3" <|
+        \_ ->
+            let
+                item =
+                    { ingredient = "a", amount = "1", currMeasurement = "cup", newMeasurement = "ounce", isScalable = True }
+
+                input =
+                    { items = [ item ], scale = 3 }
+
+                output =
+                    { items = [ { item | amount = "24", currMeasurement = "ounce" } ], scale = 1 }
             in
             Expect.equal (Just output) (rationalize input)
 
@@ -117,7 +151,7 @@ testRoundToEighth =
                     [ "1.0", "0.5", "0.1" ]
 
                 output =
-                    [ "1.0", "0.5", "0.125" ]
+                    [ 1.0, 0.5, 0.125 ]
             in
             Expect.equal (List.map roundToEighth input) output
 
