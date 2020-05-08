@@ -161,7 +161,6 @@ betweenZeroAndOne =
     , "one eighth"
     , "one quarter"
     , "three eighths"
-    , "one half"
     , "half"
     , "five eighths"
     , "three quarters"

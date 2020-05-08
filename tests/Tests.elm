@@ -92,7 +92,7 @@ testRationalizeChangeMeasurement =
         \_ ->
             let
                 item =
-                    { ingredient = "a", amount = "1", currMeasurement = "cup", newMeasurement = "ounce" }
+                    { ingredient = "a", amount = "1", currMeasurement = "CUP", newMeasurement = "OUNCE" }
 
                 input =
                     { items = [ item ], scale = 3 }
@@ -123,12 +123,12 @@ testRoundToEighth =
         \_ ->
             let
                 input =
-                    [ 1.0, 0.5, 0.1 ]
+                    [ 1.0, 0.5, 0.2 ]
 
                 output =
                     [ 1.0, 0.5, 0.125 ]
             in
-            Expect.equal output (List.map roundToEighth input)
+            Expect.equal output (List.map (roundToEighth input))
 
 
 testParseAmntToFloat : Test
@@ -137,10 +137,10 @@ testParseAmntToFloat =
         \_ ->
             let
                 input =
-                    [ "one half", "half ", "ten", "twenty one", "thirty seven and one eighth", "nineteen and a half", "nineteen and half", "1/2", "1/0", "", "a", "0" ]
+                    [ "half", "ten", "twenty one", "thirty seven and one eighth", "nineteen and a half", "nineteen and half", "1/2", "1/0", "", "a", "0" ]
 
                 output =
-                    [ 0.5, 0.5, 10, 21, 37.125, 19.2, 0.5, 0.0, 0.0, 0.0, 0.0 ]
+                    [ 0.5, 10, 21, 37.125, 19.5, 0.5, 0.0, 0.0, 0.0, 0.0 ]
             in
             Expect.equal output (List.map parseAmntToFloat input)
 
@@ -151,10 +151,10 @@ testFindIndex =
         \_ ->
             let
                 input =
-                    [ "one half", "half ", "ten", "twenty one", "thirty seven and one eighth", "nineteen and a half", "nineteen and half", "", "a", "0" ]
+                    [ "half", "ten", "twenty one", "thirty seven and one eighth", "nineteen and a half", "nineteen and half", "", "a", "0" ]
 
                 output =
-                    [ Just 0.5, Just 0.5, Just 10, Just 21, Just 37.125, Just 19.2, Nothing, Nothing, Nothing, Nothing ]
+                    [ Just 0.5, Just 10, Just 21, Just 37.125, Just 19.5, Nothing, Nothing, Nothing, Nothing ]
             in
             Expect.equal output (List.map findIndex input)
 

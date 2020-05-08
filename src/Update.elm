@@ -111,7 +111,7 @@ findDirectConversion from to =
                 Just (1 / val)
 
             else
-                Nothing
+                acc
         )
         Nothing
         conversions
@@ -158,7 +158,7 @@ findIndexHelp index predicate list =
 
         x :: xs ->
             if predicate x then
-                Just (roundToEighth (index / 9))
+                Just (roundToEighth (index / 8))
 
             else
                 findIndexHelp (index + 1) predicate xs

@@ -5379,22 +5379,6 @@ var $etaque$elm_form$Form$Validate$map4 = F5(
 			v4,
 			A4($etaque$elm_form$Form$Validate$map3, func, v1, v2, v3));
 	});
-var $etaque$elm_form$Form$Error$Empty = {$: 'Empty'};
-var $etaque$elm_form$Form$Error$InvalidString = {$: 'InvalidString'};
-var $elm$core$String$isEmpty = function (string) {
-	return string === '';
-};
-var $etaque$elm_form$Form$Validate$string = function (v) {
-	var _v0 = $etaque$elm_form$Form$Field$asString(v);
-	if (_v0.$ === 'Just') {
-		var s = _v0.a;
-		return $elm$core$String$isEmpty(s) ? $elm$core$Result$Err(
-			$etaque$elm_form$Form$Error$value($etaque$elm_form$Form$Error$Empty)) : $elm$core$Result$Ok(s);
-	} else {
-		return $elm$core$Result$Err(
-			$etaque$elm_form$Form$Error$value($etaque$elm_form$Form$Error$InvalidString));
-	}
-};
 var $author$project$Model$InvalidAmount = {$: 'InvalidAmount'};
 var $etaque$elm_form$Form$Error$CustomError = function (a) {
 	return {$: 'CustomError', a: a};
@@ -5511,10 +5495,26 @@ var $elm$core$List$member = F2(
 			},
 			xs);
 	});
+var $etaque$elm_form$Form$Error$Empty = {$: 'Empty'};
+var $etaque$elm_form$Form$Error$InvalidString = {$: 'InvalidString'};
+var $elm$core$String$isEmpty = function (string) {
+	return string === '';
+};
+var $etaque$elm_form$Form$Validate$string = function (v) {
+	var _v0 = $etaque$elm_form$Form$Field$asString(v);
+	if (_v0.$ === 'Just') {
+		var s = _v0.a;
+		return $elm$core$String$isEmpty(s) ? $elm$core$Result$Err(
+			$etaque$elm_form$Form$Error$value($etaque$elm_form$Form$Error$Empty)) : $elm$core$Result$Ok(s);
+	} else {
+		return $elm$core$Result$Err(
+			$etaque$elm_form$Form$Error$value($etaque$elm_form$Form$Error$InvalidString));
+	}
+};
 var $elm$core$String$toLower = _String_toLower;
 var $elm$core$String$trim = _String_trim;
 var $author$project$Lists$betweenZeroAndOne = _List_fromArray(
-	['', 'one eighth', 'one quarter', 'three eighths', 'one half', 'half', 'five eighths', 'three quarters', 'seven eighths']);
+	['', 'one eighth', 'one quarter', 'three eighths', 'half', 'five eighths', 'three quarters', 'seven eighths']);
 var $author$project$Lists$oneToNine = _List_fromArray(
 	['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']);
 var $author$project$Lists$tenToNineteen = _List_fromArray(
@@ -5669,7 +5669,7 @@ var $author$project$Model$validateItem = A5(
 	A2($etaque$elm_form$Form$Validate$field, 'ingredient', $author$project$Model$validateIngredient),
 	A2($etaque$elm_form$Form$Validate$field, 'amount', $author$project$Model$validateAmount),
 	A2($etaque$elm_form$Form$Validate$field, 'currMeasurement', $author$project$Model$validateMeasurement),
-	A2($etaque$elm_form$Form$Validate$field, 'newMeasurement', $etaque$elm_form$Form$Validate$string));
+	A2($etaque$elm_form$Form$Validate$field, 'newMeasurement', $author$project$Model$validateMeasurement));
 var $author$project$Model$validate = A3(
 	$etaque$elm_form$Form$Validate$map2,
 	$author$project$Model$Recipe,
@@ -5983,7 +5983,7 @@ var $author$project$Update$findDirectConversion = F2(
 					var x = _v0.a;
 					var y = _v0.b;
 					var val = _v0.c;
-					return (_Utils_eq(x, from) && _Utils_eq(y, to)) ? $elm$core$Maybe$Just(val) : ((_Utils_eq(x, to) && _Utils_eq(y, from)) ? $elm$core$Maybe$Just(1 / val) : $elm$core$Maybe$Nothing);
+					return (_Utils_eq(x, from) && _Utils_eq(y, to)) ? $elm$core$Maybe$Just(val) : ((_Utils_eq(x, to) && _Utils_eq(y, from)) ? $elm$core$Maybe$Just(1 / val) : acc);
 				}),
 			$elm$core$Maybe$Nothing,
 			$author$project$Lists$conversions);
@@ -6045,7 +6045,7 @@ var $author$project$Update$findIndexHelp = F3(
 				var xs = list.b;
 				if (predicate(x)) {
 					return $elm$core$Maybe$Just(
-						$author$project$Update$roundToEighth(index / 9));
+						$author$project$Update$roundToEighth(index / 8));
 				} else {
 					var $temp$index = index + 1,
 						$temp$predicate = predicate,
