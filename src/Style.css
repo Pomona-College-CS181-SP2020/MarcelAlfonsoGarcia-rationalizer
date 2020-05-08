@@ -1,0 +1,105 @@
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+.page {
+  background-color: #9c9cec;
+  background-size: cover;
+  height: 100vh;
+}
+
+.submit-success {
+  margin: 10px auto;
+  width: 580px;
+  border-radius: 5px;
+  float: right;
+}
+
+.result-title {
+  color: white;
+  padding: 5px 5px;
+  margin: 5px 0px;
+  text-align: center;
+  font-family: georgia;
+  font-size: 45px;
+}
+
+.submitted-item {
+  padding: 5px 5px;
+  margin: 2px auto;
+  font-family: georgia;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.ingredient-list {
+  margin: 10px;
+  width: 740px;
+  border-radius: 5px;
+  float: left;
+}
+
+.scale-title {
+  color: white;
+  padding: 5px 5px;
+  margin: 5px 0px;
+  font-family: georgia;
+  text-align: center;
+  font-size: 45px;
+}
+
+.reset {
+  width: 60px;
+  background-color: #ff6200;
+  color: white;
+  padding: 14px 10px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  margin-right: 20px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  float: right;
+}
+
+.button {
+  color: white;
+  width: 27px;
+  height: 27px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  margin-left: 5px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.error-message {
+  width: 140px;
+  padding: 5px 5px;
+  margin-bottom: 2px;
+  margin-left: 5px;
+  color: red;
+  font-size: 15px;
+}
+
+.scale-input {
+  display: block;
+  width: 50px;
+  padding: 14px 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 20px;
+  border-radius: 4px;
+}
+
+.input {
+  width: 150px;
+  padding: 5px 5px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  margin-left: 5px;
+  border-radius: 4px;
+}

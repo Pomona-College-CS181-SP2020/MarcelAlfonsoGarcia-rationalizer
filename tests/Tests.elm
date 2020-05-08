@@ -114,7 +114,7 @@ testFindDirectConversion =
                 output =
                     [ Just 3.0, Just (1 / 3), Nothing, Nothing, Nothing, Nothing, Nothing ]
             in
-            Expect.equal output (findDirectConversion input)
+            Expect.equal output (List.map (\( x, y ) -> findDirectConversion x y) input)
 
 
 testRoundToEighth : Test
@@ -128,7 +128,7 @@ testRoundToEighth =
                 output =
                     [ 1.0, 0.5, 0.125 ]
             in
-            Expect.equal (List.map roundToEighth input) output
+            Expect.equal output (List.map roundToEighth input)
 
 
 testParseAmntToFloat : Test
@@ -184,4 +184,4 @@ testDivide =
                 output =
                     [ 0.5, 0, 0, 0, 0 ]
             in
-            Expect.equal output (List.map (\x -> divide x.first x.second) input)
+            Expect.equal output (List.map (\( x, y ) -> divide x y) input)
