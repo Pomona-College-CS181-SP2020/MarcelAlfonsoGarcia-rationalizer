@@ -128,7 +128,7 @@ testRoundToEighth =
                 output =
                     [ 1.0, 0.5, 0.125 ]
             in
-            Expect.equal output (List.map (roundToEighth input))
+            Expect.equal output (List.map roundToEighth input)
 
 
 testParseAmntToFloat : Test
