@@ -58,7 +58,7 @@ testRationalizeNoScale =
         \_ ->
             let
                 item =
-                    { ingredient = "a", amount = "1", currMeasurement = "cup", newMeasurement = "pound", isScalable = True }
+                    { ingredient = "a", amount = "1", currMeasurement = "cup", newMeasurement = "pound" }
 
                 input =
                     { items = [ item ], scale = 1 }
@@ -75,7 +75,7 @@ testRationalizeTripleScale =
         \_ ->
             let
                 item =
-                    { ingredient = "a", amount = "1", currMeasurement = "cup", newMeasurement = "pound", isScalable = True }
+                    { ingredient = "a", amount = "1", currMeasurement = "cup", newMeasurement = "pound" }
 
                 input =
                     { items = [ item ], scale = 3 }
@@ -92,7 +92,7 @@ testRationalizeChangeMeasurement =
         \_ ->
             let
                 item =
-                    { ingredient = "a", amount = "1", currMeasurement = "cup", newMeasurement = "ounce", isScalable = True }
+                    { ingredient = "a", amount = "1", currMeasurement = "cup", newMeasurement = "ounce" }
 
                 input =
                     { items = [ item ], scale = 3 }
