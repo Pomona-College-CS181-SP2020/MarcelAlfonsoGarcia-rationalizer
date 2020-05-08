@@ -88,7 +88,7 @@ testRationalizeTripleScale =
 
 testRationalizeChangeMeasurement : Test
 testRationalizeChangeMeasurement =
-    test "rationalize with a scale of 3" <|
+    test "rationalize with a change of measurement" <|
         \_ ->
             let
                 item =
