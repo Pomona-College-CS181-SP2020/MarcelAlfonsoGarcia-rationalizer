@@ -103,43 +103,18 @@ testRationalizeChangeMeasurement =
             Expect.equal (Just output) (rationalize input)
 
 
+testFindDirectConversion : Test
+testFindDirectConversion =
+    test "find direct conversion" <|
+        \_ ->
+            let
+                input =
+                    [ ( "tablespoon", "teaspoon" ), ( "teaspoon", "tablespoon" ), ( "a", "teaspoon" ), ( "teaspoon", "a" ), ( "", "" ), ( "teaspoon", "" ), ( "", "teaspoon" ) ]
 
--- testChangeMeasurement : Test
--- testChangeMeasurement =
---     test "change measurements" <| \_ ->
---             let
---                 str1 = [ "1", "1.0", "a", "1.0", "a", "", "1.0", "", "a", "0", "1" ]
---                 str2 = [ "2", "1.2", "1.0", "a", "a", "1.0", "", "a", "", "1", "0" ]
---                 output = [ True, True, False, False, False, False, False, False, False, True, False ]
---             in
---                 Expect.equal (checkFloats input) output
---
--- testFindDirectConversion : Test
--- testFindDirectConversion =
---     test "find direct conversion" <|
---         \_ ->
---             let
---                 str1 =
---                     [ "tablespoon", "teaspoon", "a", "teaspoon", "a", "", "teaspoon", "" ]
---
---                 str2 =
---                     [ "teaspoon", "tablespoon", "teaspoon", "a", "teaspoon", "", "" ]
---
---                 output =
---                     [ Just 3.0, Just (1/3), Nothing, Nothing, Nothing, Nothing ]
---             in
---             Expect.equal output (findDirectConversion input)
---
--- testScaleItem : Test
--- testScaleItem =
---     test "scale item" <| \_ ->
---             let
---                 str1 = [ "1", "1.0", "a", "1.0", "a", "", "1.0", "", "a", "0", "1" ]
---                 str2 = [ "2", "1.2", "1.0", "a", "a", "1.0", "", "a", "", "1", "0" ]
---                 output = [ True, True, False, False, False, False, False, False, False, True, False ]
---             in
---                 Expect.equal (checkFloats input) output
---
+                output =
+                    [ Just 3.0, Just (1 / 3), Nothing, Nothing, Nothing, Nothing, Nothing ]
+            in
+            Expect.equal output (findDirectConversion input)
 
 
 testRoundToEighth : Test
@@ -148,7 +123,7 @@ testRoundToEighth =
         \_ ->
             let
                 input =
-                    [ "1.0", "0.5", "0.1" ]
+                    [ 1.0, 0.5, 0.1 ]
 
                 output =
                     [ 1.0, 0.5, 0.125 ]
@@ -158,7 +133,7 @@ testRoundToEighth =
 
 testParseAmntToFloat : Test
 testParseAmntToFloat =
-    test "find indices" <|
+    test "parse the list of amounts to floats" <|
         \_ ->
             let
                 input =
@@ -198,14 +173,15 @@ testFindFractionValue =
             Expect.equal output (List.map findFractionValue input)
 
 
+testDivide : Test
+testDivide =
+    test "divide strings" <|
+        \_ ->
+            let
+                input =
+                    [ ( "1", "2" ), ( "0", "1" ), ( "1", "0" ), ( "a", "1" ), ( "1", "a" ) ]
 
---
--- testDivide : Test
--- testDivide =
---     test "check floats" <| \_ ->
---             let
---                 str1 = [ "1", "1.0", "a", "1.0", "a", "", "1.0", "", "a", "0", "1" ]
---                 str2 = [ "2", "1.2", "1.0", "a", "a", "1.0", "", "a", "", "1", "0" ]
---                 output = [ True, True, False, False, False, False, False, False, False, True, False ]
---             in
---                 Expect.equal (checkFloats input) output
+                output =
+                    [ 0.5, 0, 0, 0, 0 ]
+            in
+            Expect.equal output (List.map (\x -> divide x.first x.second) input)
