@@ -410,20 +410,6 @@ selectInput state options =
                 ]
 
 
-remove : a -> List a -> List a
-remove x l =
-    List.foldr
-        (\s acc ->
-            if x == s then
-                acc
-
-            else
-                acc ++ [ x ]
-        )
-        []
-        l
-
-
 itemString : Item -> String
 itemString item =
     if parseAmntToFloat item.amount == 1.0 then
